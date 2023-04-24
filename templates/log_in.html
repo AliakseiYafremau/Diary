@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Studier</title>
+    <style>
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <h1>Авторизация</h1>
+    <br>
+    <br>
+    <p>
+        <form method="POST">
+            {% csrf_token  %}
+            {{ form.as_p }}
+            {% if error %}
+            <p class="error">{{ error }}</p>
+            {% endif %}
+            <br>
+            <input type="submit" value="Войти">
+        </form>
+    </p>
+    <p>
+        У меня нет <a href="{% url 'sign_up' %}">аккаунта</a>
+    </p>
+</body>
+</html>

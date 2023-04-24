@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ lesson.name }}</title>
+</head>
+<body>
+    Мои оценки:<br>
+    <p>
+        <ul>
+        {% for grade in notes %}
+        <li>
+        <form method="POST">
+            {% csrf_token %}
+            {{ grade }}
+            <input type=hidden name="form_id" value="delete">
+            <input type="hidden" name="value" value="{{ grade }}">
+            <input type="submit" value="Удалить">
+        </form>
+        </li>
+        {% endfor %}
+        </ul>
+        {% if av %}
+        Средняя оценка: {{ av }}
+        {% else %}
+        Введите число
+        {% endif %}
+        <form method="POST">
+            {% csrf_token  %}
+            <input type="hidden" name="form_id" value="create">
+            {{ form.as_p }}
+            {% if error %}
+            <p class="error">{{ error }}</p>
+            {% endif %}
+            <br>
+            <input type="submit" value="Создать">
+        </form>
+    </p>
+</body>
+</html>
