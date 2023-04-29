@@ -1,41 +1,13 @@
 # -*- coding: utf-8 -*-
 from django.shortcuts import render, redirect, reverse
-from .forms import SignForm, LogForm, AddLessonForm, AddGradeForm
+from .forms import AddLessonForm, AddGradeForm
 from django.contrib.auth import login, models, logout, authenticate
 from .models import CustomUser, Lesson, Grade
 from django.core.exceptions import PermissionDenied
 
 
 # Create your views here.
-def sign_up(request):
-    if request.method == 'POST':
-        form = SignForm(request.POST)
-        if form.is_valid():
-            if CustomUser.objects.filter(username=form.cleaned_data['username']).exists() or models.User.objects.filter(username=form.cleaned_data['username']).exists():
-                return render(request, 'sign_up.html', {"form": form, "error": 'Имя уже занято. Попробуйте другое имя'})
-            else:
-                new_user = CustomUser.objects.create_user(username=form.cleaned_data['username'], password=form.cleaned_data['password'])
-                login(request, new_user)
-                return redirect('user_page', new_user)
-    else:
-        form = SignForm()
-    return render(request, 'sign_up.html', {"form": form})
 
-
-def log_in(request):
-    print(request.user)
-    if request.method == 'POST':
-        form = LogForm(request.POST)
-        if form.is_valid():
-            user = CustomUser.objects.filter(username=form.cleaned_data['username'])
-            if user.exists():
-                login(request, user[0])
-                return redirect('user_page', user[0])
-            else:
-                return render(request, 'log_in.html', {'form': form, 'error': 'Имя или пароль неправильный'})
-    else:
-        form = SignForm()
-    return render(request, 'log_in.html', {"form": form})
 
 
 def user_page(request, name):
@@ -64,10 +36,6 @@ def user_page(request, name):
         form = AddLessonForm()
         print('render')
     return render(request, 'user_page.html', {'user':user, 'form': form, 'lessons': list_of_lessons})
-
-
-def distributor(request):
-    return redirect('log_in')
 
 
 def lesson_page(request, name, lesson):
